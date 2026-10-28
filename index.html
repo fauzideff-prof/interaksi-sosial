@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Media Pembelajaran Interaktif IPS: Interaksi Sosial SMP Kelas VII</title>
+  <meta name="description" content="Media pembelajaran digital interaktif IPS Kelas VII SMP Kurikulum Merdeka materi Interaksi Sosial dengan simulasi, game detektif, latihan soal, evaluasi otomatis, dan rekap hasil belajar.">
+  <style>
+    /* Reset & Base Styles */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background-color: #f8fafc;
+      color: #1e293b;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    a, button { cursor: pointer; font-family: inherit; }
+    button:disabled { cursor: default; }
+
+    /* Layout Containers */
+    .container { max-width: 1024px; margin: 0 auto; padding: 0 16px; }
+    .header-nav {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid #e2e8f0;
+      padding: 10px 0;
+    }
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    }
+    .brand {
+      display: flex; align-items: center; gap: 10px; background: none; border: none; text-align: left;
+    }
+    .brand-logo {
+      width: 36px; height: 36px; border-radius: 10px; background: #2563eb; color: #fff;
+      display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 16px;
+    }
+    .brand-text h1 { font-size: 15px; font-weight: 800; color: #0f172a; line-height: 1.2; }
+    .brand-text p { font-size: 11px; color: #64748b; }
+
+    /* Nav Links */
+    .menu-bar {
+      display: flex; gap: 6px; overflow-x: auto; padding: 4px 0; scrollbar-width: none;
+    }
+    .menu-bar::-webkit-scrollbar { display: none; }
+    .menu-btn {
+      padding: 6px 12px; font-size: 12px; font-weight: 600; border-radius: 8px;
+      border: 1px solid transparent; background: #f1f5f9; color: #475569;
+      white-space: nowrap; transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s, color 0.2s, box-shadow 0.2s;
+    }
+    .menu-btn:hover { background: #e2e8f0; color: #0f172a; transform: translateY(-1.5px); box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+    .menu-btn:active { transform: scale(0.97); }
+    .menu-btn.active { background: #2563eb; color: #fff; box-shadow: 0 2px 6px rgba(37,99,235,0.25); }
+    .menu-btn.completed { background: #ecfdf5; color: #047857; border-color: #a7f3d0; }
+
+    /* Top Controls */
+    .top-controls { display: flex; align-items: center; gap: 8px; }
+    .ctrl-btn {
+      padding: 7px 10px; border-radius: 8px; border: 1px solid #cbd5e1; background: #fff;
+      font-size: 12px; font-weight: 600; color: #475569; transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .ctrl-btn:hover { background: #f8fafc; border-color: #94a3b8; transform: translateY(-1px); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    .ctrl-btn:active { transform: scale(0.96); }
+    .progress-bar-wrap { width: 100%; height: 5px; background: #e2e8f0; border-radius: 999px; overflow: hidden; margin-top: 8px; }
+    .progress-bar-fill { height: 100%; background: linear-gradient(90deg, #2563eb, #10b981); width: 0%; transition: width 0.4s ease; }
+
+    /* Main Card */
+    .card {
+      background: #fff; border-radius: 16px; border: 1px solid #e2e8f0; padding: 24px;
+      margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); transition: box-shadow 0.2s;
+    }
+    .title-header { margin-bottom: 20px; }
+    .kicker { font-size: 11px; font-weight: 700; text-transform: uppercase; color: #2563eb; letter-spacing: 0.5px; }
+    .page-title { font-size: 24px; font-weight: 800; color: #0f172a; margin-top: 4px; }
+    .page-desc { font-size: 14px; color: #64748b; margin-top: 4px; }
+
+    /* Interactive Options */
+    .option-btn {
+      width: 100%; text-align: left; padding: 14px; border-radius: 12px; border: 1px solid #e2e8f0;
+      background: #fff; margin-bottom: 10px; font-size: 13px; font-weight: 500;
+      display: flex; gap: 10px; align-items: flex-start; transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.15s, background 0.15s, box-shadow 0.15s;
+    }
+    .option-btn:hover:not(:disabled) { border-color: #2563eb; background: #f8fafc; transform: translateY(-1.5px); box-shadow: 0 3px 8px rgba(37,99,235,0.08); }
+    .option-btn:active:not(:disabled) { transform: scale(0.99); }
+    .opt-circle {
+      width: 20px; height: 20px; border-radius: 50%; border: 1px solid #cbd5e1;
+      display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0;
+      transition: transform 0.15s;
+    }
+    .option-btn.selected { border-color: #2563eb; background: #eff6ff; }
+    .option-btn.correct { border-color: #10b981; background: #ecfdf5; color: #064e3b; }
+    .option-btn.wrong { border-color: #ef4444; background: #fef2f2; color: #7f1d1d; }
+
+    /* Feedback Box */
+    .feedback-box {
+      padding: 14px; border-radius: 12px; font-size: 13px; line-height: 1.5; margin-top: 14px;
+    }
+    .feedback-box.correct { background: #ecfdf5; border: 1px solid #a7f3d0; color: #064e3b; }
+    .feedback-box.info { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e3a8a; }
+    .feedback-box.warning { background: #fffbeb; border: 1px solid #fde68a; color: #78350f; }
+
+    /* Action Buttons */
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px;
+      background: #2563eb; color: #fff; font-size: 13px; font-weight: 700;
+      border-radius: 10px; border: none; transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s, box-shadow 0.2s;
+    }
+    .btn-primary:hover { background: #1d4ed8; transform: translateY(-1.5px); box-shadow: 0 4px 10px rgba(37,99,235,0.25); }
+    .btn-primary:active { transform: scale(0.97); }
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 6px; padding: 9px 18px;
+      background: #fff; color: #475569; font-size: 13px; font-weight: 600;
+      border-radius: 10px; border: 1px solid #cbd5e1; transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), all 0.2s;
+    }
+    .btn-secondary:hover { background: #f1f5f9; color: #0f172a; transform: translateY(-1px); box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
+    .btn-secondary:active { transform: scale(0.97); }
+    .nav-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      border-top: 1px solid #e2e8f0; padding-top: 16px; margin-top: 20px;
+    }
+
+    /* Grids & Cards */
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+    .subcard {
+      background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px;
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s, border-color 0.2s, background 0.2s;
+    }
+    .subcard:hover {
+      background: #ffffff; border-color: #93c5fd; transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    /* Illustrations Container */
+    .illustration-frame {
+      width: 100%; border-radius: 14px; overflow: hidden; border: 1px solid #e2e8f0;
+      margin-bottom: 16px; background: #fff;
+    }
+    .illustration-frame svg { width: 100%; height: auto; display: block; }
+
+    /* Tips Box */
+    .tips-box {
+      background: linear-gradient(135deg, #fffbeb, #ffffff);
+      border: 1px solid #fde68a; border-radius: 14px; padding: 16px; margin: 16px 0;
+    }
+    .tips-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+    .tips-badge { background: #fef3c7; color: #92400e; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 6px; }
+
+    /* Toast Notification (Non-blocking replacement for alert) */
+    #toast-msg {
+      position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+      background: #0f172a; color: #fff; padding: 12px 20px; border-radius: 12px;
+      font-size: 13px; font-weight: 600; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      display: none; align-items: center; gap: 8px; transition: all 0.3s ease;
+    }
+
+    /* Print styling */
+    @media print {
+      .no-print { display: none !important; }
+      body { background: #fff !important; color: #000 !important; }
+      .card { border: 1px solid #000 !important; box-shadow: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header Nav (No Print) -->
+  <header class="header-nav no-print">
+    <div class="container">
+      <div class="nav-inner">
+        <button class="brand" onclick="navigateTo('welcome')">
+          <div class="brand-logo">IPS</div>
+          <div class="brand-text">
+            <h1>Interaksi Sosial</h1>
+            <p>SMP Kelas VII · Kurikulum Merdeka</p>
+          </div>
+        </button>
+
+        <div class="top-controls">
+          <button class="ctrl-btn" id="sound-btn" onclick="toggleSound()">🔊 Suara: ON</button>
+          <button class="ctrl-btn" onclick="confirmReset()">🔄 Reset</button>
+        </div>
+      </div>
+
+      <nav class="menu-bar" id="menu-bar" style="margin-top: 8px;">
+        <!-- Filled dynamically -->
+      </nav>
+
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="progress-fill"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="container" style="padding-top: 20px; padding-bottom: 40px;" id="app-view">
+    <!-- View will be rendered dynamically by JavaScript -->
+  </main>
+
+  <!-- Non-blocking Toast Element -->
+  <div id="toast-msg"></div>
+
+  <footer class="no-print" style="text-align: center; font-size: 12px; color: #64748b; padding: 20px 0; border-top: 1px solid #e2e8f0;">
+    Media Pembelajaran Interaktif IPS SMP Kelas VII · 100% Offline Tanpa Koneksi Internet · Kurikulum Merdeka
+  </footer>
+
+  <script>
+    /* ==========================================================================
+       INLINE EDUCATIONAL VECTOR ILLUSTRATIONS (100% OFFLINE COMPATIBLE)
+       ========================================================================== */
+    const SVG_HERO = `<svg viewBox="0 0 680 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="320" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#E0F2FE"/>
+          <stop offset="0.7" stop-color="#F0F9FF"/>
+          <stop offset="1" stop-color="#ECFDF5"/>
+        </linearGradient>
+      </defs>
+      <rect width="680" height="320" rx="14" fill="url(#skyGrad)"/>
+      <circle cx="600" cy="50" r="28" fill="#FDE047" opacity="0.85"/>
+      <circle cx="600" cy="50" r="38" fill="#FEF08A" opacity="0.35"/>
+      <path d="M60 60 C75 48 105 48 120 60 C130 50 150 50 160 62 C165 72 155 80 140 80 L70 80 Z" fill="#FFF" opacity="0.8"/>
+      
+      <!-- School Building -->
+      <rect x="230" y="90" width="220" height="140" rx="6" fill="#FFF" stroke="#CBD5E1" stroke-width="2"/>
+      <polygon points="220,90 340,40 460,90" fill="#1E40AF"/>
+      <rect x="325" y="24" width="30" height="28" rx="2" fill="#1E3A8A"/>
+      <polygon points="320,24 340,8 360,24" fill="#EF4444"/>
+      <circle cx="340" cy="38" r="8" fill="#FFF"/>
+      <rect x="280" y="100" width="120" height="18" rx="4" fill="#FEF08A" stroke="#F59E0B"/>
+      <text x="340" y="113" text-anchor="middle" fill="#92400E" font-size="9" font-weight="800">SMP MERDEKA 01</text>
+      <rect x="325" y="155" width="30" height="75" rx="3" fill="#0284C7"/>
+      <rect x="260" y="125" width="22" height="28" rx="2" fill="#BAE6FD"/>
+      <rect x="398" y="125" width="22" height="28" rx="2" fill="#BAE6FD"/>
+
+      <!-- Indonesian Flag on Pole -->
+      <line x1="190" y1="90" x2="190" y2="230" stroke="#94A3B8" stroke-width="3" stroke-linecap="round"/>
+      <rect x="190" y="92" width="32" height="10" fill="#EF4444"/>
+      <rect x="190" y="102" width="32" height="10" fill="#FFF" stroke="#E2E8F0" stroke-width="0.5"/>
+
+      <!-- Trees & Lawn -->
+      <ellipse cx="130" cy="205" rx="32" ry="40" fill="#059669"/>
+      <ellipse cx="550" cy="205" rx="36" ry="45" fill="#059669"/>
+      <path d="M0 230 Q 340 220 680 230 L680 320 L0 320 Z" fill="#10B981"/>
+      <polygon points="280,230 400,230 440,320 240,320" fill="#E2E8F0" opacity="0.8"/>
+
+      <!-- Student 1 (Boy Waving with IPS Book) -->
+      <rect x="238" y="245" width="10" height="45" rx="2" fill="#1E3A8A"/>
+      <rect x="252" y="245" width="10" height="45" rx="2" fill="#1E3A8A"/>
+      <ellipse cx="243" cy="292" rx="8" ry="4" fill="#0F172A"/>
+      <ellipse cx="257" cy="292" rx="8" ry="4" fill="#0F172A"/>
+      <rect x="232" y="185" width="36" height="62" rx="5" fill="#FFF" stroke="#CBD5E1" stroke-width="1.5"/>
+      <polygon points="250,190 247,212 250,218 253,212" fill="#1E3A8A"/>
+      <rect x="216" y="215" width="16" height="22" rx="2" fill="#2563EB"/>
+      <text x="224" y="230" text-anchor="middle" fill="#FFF" font-size="6" font-weight="bold">IPS</text>
+      <path d="M268 192 Q 285 170 282 155" stroke="#FDBA74" stroke-width="8" stroke-linecap="round"/>
+      <circle cx="282" cy="153" r="5" fill="#FDBA74"/>
+      <circle cx="250" cy="158" r="17" fill="#FDBA74"/>
+      <path d="M234 156 C234 142 266 142 266 156 Z" fill="#1E293B"/>
+      <circle cx="245" cy="158" r="2" fill="#0F172A"/>
+      <circle cx="255" cy="158" r="2" fill="#0F172A"/>
+      <path d="M246 166 Q 250 170 254 166" stroke="#9A3412" stroke-width="1.5" fill="none"/>
+
+      <!-- Student 2 (Girl in Hijab Waving back) -->
+      <polygon points="415,240 445,240 452,292 408,292" fill="#1E3A8A"/>
+      <ellipse cx="423" cy="294" rx="7" ry="4" fill="#0F172A"/>
+      <ellipse cx="439" cy="294" rx="7" ry="4" fill="#0F172A"/>
+      <rect x="414" y="185" width="32" height="58" rx="4" fill="#FFF" stroke="#CBD5E1" stroke-width="1.5"/>
+      <path d="M410 162 C410 138 450 138 450 162 C452 186 444 204 430 204 C416 204 408 186 410 162 Z" fill="#FFF" stroke="#E2E8F0" stroke-width="1.5"/>
+      <ellipse cx="430" cy="162" rx="12" ry="14" fill="#FED7AA"/>
+      <circle cx="425" cy="161" r="1.8" fill="#0F172A"/>
+      <circle cx="435" cy="161" r="1.8" fill="#0F172A"/>
+      <path d="M426 169 Q 430 172 434 169" stroke="#9A3412" stroke-width="1.5" fill="none"/>
+      <path d="M415 192 Q 396 175 398 160" stroke="#FED7AA" stroke-width="7" stroke-linecap="round"/>
+      <circle cx="398" cy="158" r="5" fill="#FED7AA"/>
+
+      <!-- Speech Bubbles -->
+      <rect x="260" y="115" width="105" height="30" rx="10" fill="#FFF" stroke="#3B82F6" stroke-width="1.5"/>
+      <text x="312" y="134" text-anchor="middle" fill="#1E40AF" font-size="10" font-weight="bold">"Hai Farhan! 👋"</text>
+      <rect x="365" y="120" width="120" height="30" rx="10" fill="#EFF6FF" stroke="#10B981" stroke-width="1.5"/>
+      <text x="425" y="139" text-anchor="middle" fill="#065F46" font-size="10" font-weight="bold">"Halo Siti, ayo piket! ✨"</text>
+    </svg>`;
+
+    const SVG_SAPAAN = `<svg viewBox="0 0 520 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="520" height="200" rx="12" fill="#F0F9FF"/>
+      <rect x="20" y="20" width="480" height="130" rx="8" fill="#FFF" stroke="#E2E8F0"/>
+      <rect x="40" y="40" width="45" height="90" rx="3" fill="#E0F2FE"/>
+      <rect x="95" y="40" width="45" height="90" rx="3" fill="#E0F2FE"/>
+      <rect x="380" y="40" width="45" height="90" rx="3" fill="#E0F2FE"/>
+      <rect x="435" y="40" width="45" height="90" rx="3" fill="#E0F2FE"/>
+      <rect x="20" y="145" width="480" height="35" fill="#F8FAFC"/>
+      
+      <!-- Two students greeting -->
+      <circle cx="210" cy="85" r="15" fill="#FED7AA"/>
+      <rect x="195" y="102" width="30" height="45" rx="4" fill="#FFF" stroke="#94A3B8"/>
+      <polygon points="210,105 207,122 210,126 213,122" fill="#1E3A8A"/>
+      <path d="M225 108 Q 245 92 245 80" stroke="#FED7AA" stroke-width="6" stroke-linecap="round"/>
+      <circle cx="310" cy="85" r="15" fill="#FDBA74"/>
+      <rect x="295" y="102" width="30" height="45" rx="4" fill="#FFF" stroke="#94A3B8"/>
+      <polygon points="310,105 307,122 310,126 313,122" fill="#1E3A8A"/>
+      <path d="M295 108 Q 275 92 275 80" stroke="#FDBA74" stroke-width="6" stroke-linecap="round"/>
+
+      <rect x="215" y="38" width="90" height="26" rx="8" fill="#2563EB"/>
+      <text x="260" y="55" text-anchor="middle" fill="#FFF" font-size="10" font-weight="bold">"Selamat Pagi! 😊"</text>
+      <rect x="175" y="160" width="170" height="22" rx="11" fill="#ECFDF5" stroke="#10B981"/>
+      <text x="260" y="175" text-anchor="middle" fill="#065F46" font-size="9" font-weight="bold">⇄ Kontak Langsung & Komunikasi 2 Arah</text>
+    </svg>`;
+
+    const SVG_PIKET = `<svg viewBox="0 0 520 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="520" height="200" rx="12" fill="#F0FDF4"/>
+      <rect x="30" y="20" width="460" height="85" rx="6" fill="#064E3B" stroke="#047857" stroke-width="2"/>
+      <text x="260" y="50" text-anchor="middle" fill="#FEF08A" font-size="12" font-weight="bold">PIKET KELAS VII-B: GOTONG ROYONG</text>
+      <text x="260" y="70" text-anchor="middle" fill="#A7F3D0" font-size="10">"Saling bekerja sama mencapai kelas yang bersih dan nyaman"</text>
+      <rect x="20" y="130" width="480" height="50" fill="#E2E8F0" rx="4"/>
+      
+      <!-- Student 1 sweeping -->
+      <circle cx="120" cy="105" r="13" fill="#FED7AA"/>
+      <rect x="110" y="120" width="20" height="35" rx="3" fill="#FFF" stroke="#CBD5E1"/>
+      <line x1="125" y1="125" x2="90" y2="175" stroke="#78350F" stroke-width="4" stroke-linecap="round"/>
+      <polygon points="75,170 95,170 100,185 70,185" fill="#D97706"/>
+
+      <!-- Student 2 cleaning board -->
+      <circle cx="260" cy="90" r="13" fill="#FDBA74"/>
+      <rect x="250" y="105" width="20" height="40" rx="3" fill="#FFF" stroke="#CBD5E1"/>
+      <rect x="268" y="78" width="12" height="7" rx="2" fill="#475569"/>
+
+      <!-- Student 3 organizing books -->
+      <circle cx="390" cy="105" r="13" fill="#FED7AA"/>
+      <rect x="380" y="120" width="20" height="35" rx="3" fill="#FFF" stroke="#CBD5E1"/>
+      <rect x="415" y="128" width="50" height="30" rx="3" fill="#92400E"/>
+      <rect x="425" y="123" width="14" height="5" fill="#3B82F6"/>
+
+      <rect x="175" y="165" width="170" height="22" rx="11" fill="#FEF3C7" stroke="#F59E0B"/>
+      <text x="260" y="180" text-anchor="middle" fill="#92400E" font-size="9" font-weight="bold">🤝 Kerja Sama Asosiatif (Gotong Royong)</text>
+    </svg>`;
+
+    const SVG_MUSYAWARAH = `<svg viewBox="0 0 520 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="520" height="200" rx="12" fill="#FFFBEB"/>
+      <rect x="30" y="20" width="460" height="60" rx="6" fill="#F8FAFC" stroke="#E2E8F0"/>
+      <rect x="50" y="28" width="100" height="40" fill="#E2E8F0"/>
+      <rect x="370" y="28" width="100" height="40" fill="#E2E8F0"/>
+      
+      <!-- Round discussion table -->
+      <ellipse cx="260" cy="125" rx="85" ry="35" fill="#E2E8F0" stroke="#CBD5E1" stroke-width="2"/>
+      <rect x="238" y="115" width="44" height="18" rx="3" fill="#FFF" stroke="#94A3B8"/>
+      <text x="260" y="127" text-anchor="middle" fill="#3B82F6" font-size="7" font-weight="bold">TUGAS IPS</text>
+
+      <circle cx="150" cy="105" r="13" fill="#FED7AA"/>
+      <rect x="140" y="120" width="20" height="38" rx="3" fill="#FFF" stroke="#CBD5E1"/>
+      <path d="M160 124 L180 115" stroke="#FED7AA" stroke-width="4" stroke-linecap="round"/>
+
+      <circle cx="260" cy="75" r="14" fill="#FDBA74"/>
+      <rect x="250" y="90" width="20" height="38" rx="3" fill="#FFF" stroke="#CBD5E1"/>
+
+      <circle cx="370" cy="105" r="13" fill="#FED7AA"/>
+      <rect x="360" y="120" width="20" height="38" rx="3" fill="#FFF" stroke="#CBD5E1"/>
+      <path d="M360 124 L340 115" stroke="#FED7AA" stroke-width="4" stroke-linecap="round"/>
+
+      <!-- Lightbulb -->
+      <circle cx="260" cy="40" r="12" fill="#FEF08A" stroke="#EAB308"/>
+      <text x="260" y="44" text-anchor="middle" fill="#854D0E" font-size="9">💡</text>
+
+      <rect x="175" y="165" width="170" height="22" rx="11" fill="#EFF6FF" stroke="#3B82F6"/>
+      <text x="260" y="180" text-anchor="middle" fill="#1E40AF" font-size="9" font-weight="bold">⚖️ Akomodasi (Musyawarah Mufakat)</text>
+    </svg>`;
+
+    const SVG_DETECTIVE_BANNER = `<svg viewBox="0 0 500 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="500" height="180" rx="12" fill="#0F172A"/>
+      <rect x="30" y="45" width="80" height="80" rx="4" fill="#FEF08A" stroke="#EAB308" transform="rotate(-4 30 45)"/>
+      <text x="70" y="70" text-anchor="middle" fill="#713F12" font-size="8" font-weight="bold">KASUS #1</text>
+      <text x="70" y="85" text-anchor="middle" fill="#854D0E" font-size="7">Kerja Sama</text>
+
+      <rect x="385" y="45" width="80" height="80" rx="4" fill="#BAE6FD" stroke="#38BDF8" transform="rotate(5 385 45)"/>
+      <text x="425" y="70" text-anchor="middle" fill="#075985" font-size="8" font-weight="bold">KASUS #2</text>
+      <text x="425" y="85" text-anchor="middle" fill="#0369A1" font-size="7">Kompetisi</text>
+
+      <!-- Mascot -->
+      <ellipse cx="250" cy="65" rx="30" ry="10" fill="#78350F"/>
+      <path d="M228 64 C228 42 272 42 272 64 Z" fill="#92400E"/>
+      <circle cx="250" cy="85" r="18" fill="#FED7AA"/>
+      <circle cx="244" cy="84" r="2" fill="#0F172A"/>
+      <circle cx="256" cy="84" r="2" fill="#0F172A"/>
+      <path d="M245 93 Q 250 97 255 93" stroke="#78350F" stroke-width="2" fill="none"/>
+      <path d="M230 105 L270 105 L278 145 L222 145 Z" fill="#B45309"/>
+
+      <circle cx="275" cy="100" r="18" fill="#E0F2FE" stroke="#F59E0B" stroke-width="4" opacity="0.9"/>
+      <line x1="288" y1="113" x2="305" y2="130" stroke="#78350F" stroke-width="6" stroke-linecap="round"/>
+      <text x="275" y="105" text-anchor="middle" font-size="12">🔍</text>
+
+      <rect x="180" y="145" width="140" height="22" rx="11" fill="#F59E0B"/>
+      <text x="250" y="159" text-anchor="middle" fill="#78350F" font-size="9" font-weight="800">★ DETEKTIF INTERAKSI SOSIAL ★</text>
+    </svg>`;
+
+    /* ==========================================================================
+       DATA MATERI & ASESMEN KURIKULUM MERDEKA KELAS VII SMP
+       ========================================================================== */
+    const STATE = {
+      studentName: '',
+      hasStarted: false,
+      soundEnabled: true,
+      currentMenu: 'welcome',
+      completedMenus: [],
+      apersepsiAnswers: {},
+      materiSubLevel: 1,
+      simulasiAnswers: {},
+      gameScore: 0,
+      gameLives: 3,
+      gameIndex: 0,
+      latihanAnswers: {},
+      evaluasiAnswers: {},
+      evaluasiScore: 0,
+      evaluasiFinished: false,
+      evaluasiShowReview: false,
+      refleksi: { halBaru: '', bentukSering: '', resolusiKonflik: '', komitmenPositif: '' }
+    };
+
+    // Load from LocalStorage if available
+    try {
+      const saved = localStorage.getItem('ips_interaksi_standalone_v1');
+      if (saved) {
+        Object.assign(STATE, JSON.parse(saved));
+      }
+    } catch (e) {}
+
+    function saveState() {
+      try {
+        localStorage.setItem('ips_interaksi_standalone_v1', JSON.stringify(STATE));
+      } catch (e) {}
+      updateHeaderProgress();
+    }
+
+    /* Non-blocking Toast replacement for alert */
+    function showToast(message, type) {
+      const toast = document.getElementById('toast-msg');
+      if (!toast) return;
+      toast.innerText = message;
+      toast.style.background = type === 'error' ? '#e11d48' : (type === 'success' ? '#059669' : '#0f172a');
+      toast.style.display = 'flex';
+      setTimeout(() => { toast.style.display = 'none'; }, 3200);
+    }
+
+    /* Sound Synthesizer via Web Audio API */
+    let audioCtx = null;
+    function getAudioCtx() {
+      if (!audioCtx && window.AudioContext) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      return audioCtx;
+    }
+    function playBeep(freq, type, duration) {
+      if (!STATE.soundEnabled) return;
+      try {
+        const ctx = getAudioCtx();
+        if (!ctx) return;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = type || 'sine';
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+        gain.gain.setValueAtTime(0.12, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + duration);
+      } catch (e) {}
+    }
+    function playSound(name) {
+      if (!STATE.soundEnabled) return;
+      if (name === 'click') playBeep(600, 'sine', 0.05);
+      else if (name === 'correct') {
+        playBeep(523, 'triangle', 0.1);
+        setTimeout(() => playBeep(659, 'triangle', 0.1), 80);
+        setTimeout(() => playBeep(784, 'triangle', 0.2), 160);
+      } else if (name === 'wrong') {
+        playBeep(260, 'sawtooth', 0.15);
+        setTimeout(() => playBeep(180, 'sawtooth', 0.2), 100);
+      } else if (name === 'fanfare') {
+        playBeep(523, 'triangle', 0.12);
+        setTimeout(() => playBeep(659, 'triangle', 0.12), 120);
+        setTimeout(() => playBeep(784, 'triangle', 0.15), 240);
+        setTimeout(() => playBeep(1046, 'triangle', 0.4), 400);
+      }
+    }
+    function toggleSound() {
+      STATE.soundEnabled = !STATE.soundEnabled;
+      document.getElementById('sound-btn').innerText = STATE.soundEnabled ? '🔊 Suara: ON' : '🔇 Suara: OFF';
+      playSound('click');
+      saveState();
+      showToast(STATE.soundEnabled ? '🔊 Efek suara diaktifkan' : '🔇 Efek suara dinonaktifkan', 'info');
+    }
+
+    /* Menu Definitions */
+    const MENUS = [
+      { id: 'petunjuk', label: '1. Petunjuk' },
+      { id: 'tujuan', label: '2. Tujuan' },
+      { id: 'apersepsi', label: '3. Apersepsi' },
+      { id: 'materi', label: '4. Materi' },
+      { id: 'simulasi', label: '5. Simulasi' },
+      { id: 'game', label: '6. Game Detektif' },
+      { id: 'latihan', label: '7. Latihan' },
+      { id: 'evaluasi', label: '8. Evaluasi' },
+      { id: 'refleksi', label: '9. Refleksi' },
+      { id: 'hasil', label: '10. Hasil Belajar' }
+    ];
+
+    function updateHeaderProgress() {
+      const menuBar = document.getElementById('menu-bar');
+      if (!menuBar) return;
+      menuBar.innerHTML = '';
+      MENUS.forEach(m => {
+        const btn = document.createElement('button');
+        btn.className = 'menu-btn' + (STATE.currentMenu === m.id ? ' active' : '') + (STATE.completedMenus.includes(m.id) ? ' completed' : '');
+        btn.innerText = m.label;
+        btn.onclick = () => { playSound('click'); navigateTo(m.id); };
+        menuBar.appendChild(btn);
+      });
+
+      // Progress Calculation
+      let p = 0;
+      if (STATE.hasStarted) p += 10;
+      if (STATE.completedMenus.includes('tujuan')) p += 10;
+      if (Object.keys(STATE.apersepsiAnswers).length >= 2) p += 10;
+      if (STATE.completedMenus.includes('materi')) p += 15;
+      if (Object.keys(STATE.simulasiAnswers).length >= 2) p += 15;
+      if (STATE.gameScore > 0) p += 10;
+      if (Object.keys(STATE.latihanAnswers).length >= 5) p += 10;
+      if (STATE.evaluasiFinished) p += 20;
+      if (STATE.refleksi.halBaru) p += 10;
+      p = Math.min(100, p);
+      document.getElementById('progress-fill').style.width = p + '%';
+    }
+
+    function navigateTo(menuId) {
+      STATE.currentMenu = menuId;
+      if (!STATE.completedMenus.includes(menuId) && menuId !== 'welcome') {
+        STATE.completedMenus.push(menuId);
+      }
+      saveState();
+      renderApp();
+      window.scrollTo(0, 0);
+    }
+
+    function confirmReset() {
+      STATE.apersepsiAnswers = {};
+      STATE.simulasiAnswers = {};
+      STATE.gameScore = 0;
+      STATE.gameLives = 3;
+      STATE.gameIndex = 0;
+      STATE.latihanAnswers = {};
+      STATE.evaluasiAnswers = {};
+      STATE.evaluasiScore = 0;
+      STATE.evaluasiFinished = false;
+      STATE.completedMenus = [];
+      STATE.materiSubLevel = 1;
+      saveState();
+      showToast('🔄 Progres telah berhasil direset dari awal!', 'info');
+      navigateTo('welcome');
+    }
+
+    /* VIEW RENDERERS */
+    function renderApp() {
+      const container = document.getElementById('app-view');
+      updateHeaderProgress();
+
+      if (STATE.currentMenu === 'welcome') {
+        renderWelcome(container);
+      } else if (STATE.currentMenu === 'petunjuk') {
+        renderPetunjuk(container);
+      } else if (STATE.currentMenu === 'tujuan') {
+        renderTujuan(container);
+      } else if (STATE.currentMenu === 'apersepsi') {
+        renderApersepsi(container);
+      } else if (STATE.currentMenu === 'materi') {
+        renderMateri(container);
+      } else if (STATE.currentMenu === 'simulasi') {
+        renderSimulasi(container);
+      } else if (STATE.currentMenu === 'game') {
+        renderGame(container);
+      } else if (STATE.currentMenu === 'latihan') {
+        renderLatihan(container);
+      } else if (STATE.currentMenu === 'evaluasi') {
+        renderEvaluasi(container);
+      } else if (STATE.currentMenu === 'refleksi') {
+        renderRefleksi(container);
+      } else if (STATE.currentMenu === 'hasil') {
+        renderHasil(container);
+      }
+    }
+
+    /* 1. Welcome Screen with Hero School Illustration */
+    function renderWelcome(el) {
+      el.innerHTML = `
+        <div class="card" style="text-align: center; padding: 36px 20px;">
+          <div class="kicker">Mata Pelajaran IPS · Kelas VII SMP/MTs</div>
+          <h1 style="font-size: 28px; font-weight: 800; color: #0f172a; margin-top: 6px;">MEDIA PEMBELAJARAN INTERAKTIF IPS</h1>
+          <h2 style="font-size: 20px; font-weight: 700; color: #2563eb; margin-top: 2px;">INTERAKSI SOSIAL</h2>
+          <p style="font-size: 14px; color: #64748b; max-width: 600px; margin: 10px auto 20px;">
+            Kurikulum Merdeka — Belajar konsep hubungan timbal balik manusia, syarat kontak & komunikasi, bentuk asosiatif & disosiatif, simulasi nyata, dan game detektif investigasi.
+          </p>
+
+          <!-- Integrated Educational Illustration -->
+          <div class="illustration-frame" style="max-width: 680px; margin: 0 auto 24px;">
+            ${SVG_HERO}
+          </div>
+
+          <div style="max-width: 440px; margin: 0 auto; background: #f8fafc; padding: 22px; border-radius: 14px; border: 1px solid #e2e8f0; text-align: left;">
+            <label style="display: block; font-size: 13px; font-weight: 700; color: #334155; margin-bottom: 6px;">Nama Lengkap Peserta Didik:</label>
+            <input type="text" id="name-input" value="${STATE.studentName}" placeholder="Ketik nama lengkapmu..." style="width: 100%; padding: 12px 14px; border-radius: 10px; border: 1px solid #cbd5e1; font-size: 14px; margin-bottom: 12px;" />
+            <button class="btn-primary" style="width: 100%; justify-content: center; padding: 12px; font-size: 14px;" onclick="handleStart()">
+              MULAI BELAJAR SEKARANG →
+            </button>
+          </div>
+        </div>
+      `;
+    }
+    function handleStart() {
+      const name = document.getElementById('name-input').value.trim();
+      if (!name) {
+        showToast('⚠️ Silakan ketik namamu terlebih dahulu untuk memulai!', 'error');
+        return;
+      }
+      STATE.studentName = name;
+      STATE.hasStarted = true;
+      playSound('correct');
+      navigateTo('petunjuk');
+    }
+
+    /* 2. Petunjuk */
+    function renderPetunjuk(el) {
+      el.innerHTML = `
+        <div class="card">
+          <div class="title-header">
+            <span class="kicker">Panduan Belajar</span>
+            <h2 class="page-title">1. Petunjuk Penggunaan Media</h2>
+            <p class="page-desc">Pahami alur belajar mandiri untuk mendapatkan hasil dan nilai optimal.</p>
+          </div>
+
+          <div class="grid-2">
+            <div class="subcard">
+              <h4 style="font-size: 14px; font-weight: 700; color: #0f172a; margin-bottom: 4px;">🧭 Navigasi Menu Bebas</h4>
+              <p style="font-size: 13px; color: #64748b;">Pilih menu nomor 1 hingga 10 melalui bilah atas atau tombol panah navigasi di bawah setiap halaman.</p>
+            </div>
+            <div class="subcard">
+              <h4 style="font-size: 14px; font-weight: 700; color: #0f172a; margin-bottom: 4px;">📖 Pelajari Materi & Tips</h4>
+              <p style="font-size: 13px; color: #64748b;">Gunakan tips jembatan keledai (mnemonic) dan uji pemahaman lewat kuis interaktif di setiap topik.</p>
+            </div>
+            <div class="subcard">
+              <h4 style="font-size: 14px; font-weight: 700; color: #0f172a; margin-bottom: 4px;">🎮 Game Detektif & Simulasi</h4>
+              <p style="font-size: 13px; color: #64748b;">Pecahkan 10 kasus investigasi lapangan dengan 3 nyawa dan skor poin nyata.</p>
+            </div>
+            <div class="subcard">
+              <h4 style="font-size: 14px; font-weight: 700; color: #0f172a; margin-bottom: 4px;">🖨️ Cetak Rapor Hasil</h4>
+              <p style="font-size: 13px; color: #64748b;">Nilai latihan, evaluasi akhir, dan refleksi dapat langsung dicetak atau disimpan ke PDF.</p>
+            </div>
+          </div>
+
+          <div class="nav-footer">
+            <span>Langkah 1 dari 10</span>
+            <button class="btn-primary" onclick="navigateTo('tujuan')">Lanjut ke Tujuan Pembelajaran →</button>
+          </div>
+        </div>
+      `;
+    }
+
+    /* 3. Tujuan Pembelajaran */
+    function renderTujuan(el) {
+      const objectives = [
+        { title: 'Pengertian Interaksi Sosial', desc: 'Mampu menjelaskan hubungan timbal balik dua arah dan 4 ciri utamanya (PKWT).' },
+        { title: 'Syarat Kontak & Komunikasi', desc: 'Mampu membedakan kontak primer/sekunder dan komunikasi verbal/nonverbal.' },
+        { title: 'Bentuk Asosiatif (Mempersatukan)', desc: 'Mampu menganalisis kerja sama, akomodasi, asimilasi, dan akulturasi.' },
+        { title: 'Bentuk Disosiatif (Pertentangan)', desc: 'Mampu memahami nilai kompetisi sportif, kontravensi, dan resolusi konflik damai.' },
+        { title: 'Analisis Kehidupan Nyata', desc: 'Mampu mengidentifikasi contoh nyata di rumah, sekolah, dan masyarakat.' },
+        { title: 'Sikap Sosial & Kolaborasi', desc: 'Mampu menunjukkan komitmen kerja sama, musyawarah, dan empati sosial.' }
+      ];
+      let cardsHtml = objectives.map((o, idx) => `
+        <div class="subcard">
+          <span style="font-size: 11px; font-weight: 700; color: #2563eb;">TP-0${idx+1}</span>
+          <h4 style="font-size: 14px; font-weight: 700; color: #0f172a; margin: 4px 0;">${o.title}</h4>
+          <p style="font-size: 12px; color: #64748b;">${o.desc}</p>
+        </div>
+      `).join('');
+
+      el.innerHTML = `
+        <div class="card">
+          <div class="title-header">
+            <span class="kicker">Capaian Pembelajaran</span>
+            <h2 class="page-title">2. Tujuan Pembelajaran (TP)</h2>
+            <p class="page-desc">6 kompetensi utama yang akan kamu kuasai setelah mempelajari media ini.</p>
+          </div>
+          <div class="grid-3">${cardsHtml}</div>
+          <div class="nav-footer">
+            <button class="btn-secondary" onclick="navigateTo('petunjuk')">← Kembali</button>
+            <button class="btn-primary" onclick="navigateTo('apersepsi')">Lanjut ke Apersepsi →</button>
+          </div>
+        </div>
+      `;
+    }
+
+    /* 4. Apersepsi dengan Ilustrasi Gambar Lengkap */
+    const APERSEPSI = [
+      {
+        id: 1,
+        title: 'Kasus 1: Sapaan Hangat di Gerbang Sekolah',
+        story: 'Budi bertemu kawan dan gurunya di gerbang sekolah lalu tersenyum dan menyapa: "Selamat pagi Bu Guru, hai Farhan!". Bu guru membalas ramah dan Farhan melambaikan tangan.',
+        q: 'Apakah peristiwa tersebut sudah merupakan interaksi sosial?',
+        svg: SVG_SAPAAN,
+        opts: [
+          { t: 'Ya, karena ada hubungan timbal balik aksi dan reaksi dua arah yang saling dipahami maknanya.', c: true },
+          { t: 'Bukan, karena menyapa hanyalah kebiasaan tanpa tujuan khusus.', c: false },
+          { t: 'Bukan, karena tidak ada perjanjian tertulis di antara mereka.', c: false }
+        ]
+      },
+      {
+        id: 2,
+        title: 'Kasus 2: Gotong Royong Piket Kebersihan Kelas',
+        story: 'Kelompok piket kelas VII-B membagi tugas: ada yang menyapu, merapikan meja, dan membersihkan papan tulis. Dalam 15 menit ruang kelas menjadi bersih dan nyaman.',
+        q: 'Bentuk proses sosial apa yang berlangsung pada kelompok piket tersebut?',
+        svg: SVG_PIKET,
+        opts: [
+          { t: 'Kerja sama (gotong royong) asosiatif untuk mencapai tujuan kenyamanan bersama.', c: true },
+          { t: 'Persaingan disosiatif karena saling berlomba cepat selesai.', c: false },
+          { t: 'Kontravensi tersembunyi karena merasa lelah.', c: false }
+        ]
+      },
+      {
+        id: 3,
+        title: 'Kasus 3: Musyawarah Beda Pendapat Tugas Kelompok',
+        story: 'Dua siswa berbeda pendapat tentang ide mading. Ketua kelompok menengahi dan mengusulkan jalan tengah menggabungkan kedua ide menjadi satu karya kreatif.',
+        q: 'Tindakan ketua kelompok tersebut merupakan contoh dari...',
+        svg: SVG_MUSYAWARAH,
+        opts: [
+          { t: 'Akomodasi (kompromi/mediasi) untuk mencapai jalan tengah damai yang adil.', c: true },
+          { t: 'Konflik terbuka karena melibatkan banyak pihak.', c: false },
+          { t: 'Asimilasi budaya karena menghasilkan ide baru.', c: false }
+        ]
+      }
+    ];
+
+    function renderApersepsi(el) {
+      let casesHtml = APERSEPSI.map((item, idx) => {
+        const userChoice = STATE.apersepsiAnswers[item.id];
+        let optsHtml = item.opts.map((opt, oIdx) => {
+          let cls = 'option-btn';
+          if (userChoice !== undefined) {
+            if (opt.c) cls += ' correct';
+            else if (userChoice === oIdx) cls += ' wrong';
+          }
+          return `
+            <button class="${cls}" onclick="answerApersepsi(${item.id}, ${oIdx}, ${opt.c})" ${userChoice !== undefined ? 'disabled' : ''}>
+              <span class="opt-circle">${String.fromCharCode(65+oIdx)}</span>
+              <span>${opt.t}</span>
+            </button>
+          `;
+        }).join('');
+
+        let feedback = '';
+        if (userChoice !== undefined) {
+          const isCorrect = item.opts[userChoice].c;
+          feedback = `
+            <div class="feedback-box ${isCorrect ? 'correct' : 'warning'}">
+              <strong>${isCorrect ? '✓ Luar Biasa, Analisismu Tepat!' : 'Catatan Edukatif:'}</strong>
+              ${isCorrect ? 'Tindakan ini memenuhi kontak dan komunikasi timbal balik dua arah yang produktif.' : 'Ingat kembali hakikat interaksi sosial: harus ada aksi dan reaksi timbal balik dua arah!'}
+            </div>
+          `;
+        }
+
+        return `
+          <div class="subcard" style="margin-bottom: 24px;">
+            <h4 style="font-size: 15px; font-weight: 700; color: #0f172a; margin-bottom: 8px;">${item.title}</h4>
+            <div class="illustration-frame" style="max-height: 220px;">
+              ${item.svg}
+            </div>
+            <p style="font-size: 13px; color: #475569; font-style: italic; margin-bottom: 12px; background: #fff; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0;">
+              "${item.story}"
+            </p>
+            <p style="font-size: 13px; font-weight: 700; color: #0f172a; margin-bottom: 10px;">❓ ${item.q}</p>
+            ${optsHtml}
+            ${feedback}
+          </div>
+        `;
+      }).join('');
+
+      el.innerHTML = `
+        <div class="card">
+          <div class="title-header">
+            <span class="kicker">Aktivitas Pemantik</span>
+            <h2 class="page-title">3. Apersepsi: Telaah Kasus Nyata</h2>
+            <p class="page-desc">Amati ilustrasi situasi dan jawab pertanyaan pemantik berikut untuk membangun pemahaman awal.</p>
+          </div>
+          ${casesHtml}
+          <div class="nav-footer">
+            <button class="btn-secondary" onclick="navigateTo('tujuan')">← Kembali</button>
+            <button class="btn-primary" onclick="navigateTo('materi')">Lanjut ke Materi Pembelajaran →</button>
+          </div>
+        </div>
+      `;
+    }
+    function answerApersepsi(id, optIdx, isCorrect) {
+      STATE.apersepsiAnswers[id] = optIdx;
+      playSound(isCorrect ? 'correct' : 'wrong');
+      saveState();
+      renderApp();
+    }
+
+    /* 5. Materi Pembelajaran dengan Tips Belajar & Bagan Visual */
+    const MATERI_DATA = [
+      {
+        id: 1,
+        title: 'Topik 1: Pengertian & Ciri-Ciri Interaksi Sosial',
+        summary: 'Interaksi sosial adalah hubungan timbal balik dua arah antara individu dengan individu, individu dengan kelompok, atau kelompok dengan kelompok.',
+        points: [
+          '4 Ciri Utama (Rumus PKWT): Pelaku minimal 2 orang, terjadi Komunikasi bersimbol, memiliki dimensi Waktu (lampau, kini, masa depan), dan memiliki Tujuan tertentu.',
+          'Hubungan 3 Arah: Individu-Individu (teman sebangku), Individu-Kelompok (guru mengajar kelas), dan Kelompok-Kelompok (pertandingan antarkelas).',
+          'Contoh Nyata: Bergotong royong di lingkungan RT, diskusi kelompok di kelas, dan musyawarah keluarga.'
+        ],
+        tipTitle: 'Rumus Cepat PKWT & Tes Cermin',
+        tipText: 'Ingat singkatan PKWT (Pelaku, Komunikasi, Waktu, Tujuan). Jika seseorang berbicara di depan cermin tanpa respon orang lain, itu BUKAN interaksi sosial karena tidak ada aksi-reaksi timbal balik!'
+      },
+      {
+        id: 2,
+        title: 'Topik 2: Syarat Terjadinya Interaksi Sosial',
+        summary: 'Dua syarat mutlak terjadinya interaksi sosial adalah Kontak Sosial dan Komunikasi.',
+        points: [
+          'Kontak Primer (Langsung): Tatap muka langsung secara fisik tanpa perantara (berbicara langsung, bersalaman).',
+          'Kontak Sekunder (Tidak Langsung): Menggunakan alat perantara (telepon, WhatsApp, surat, email).',
+          'Komunikasi Verbal: Menggunakan kata lisan atau tulisan.',
+          'Komunikasi Nonverbal: Menggunakan gestur tubuh, mimik wajah, dan kontak mata.'
+        ],
+        tipTitle: 'Trik Kontak: Primer = Pipi (Tatap Muka) vs Sekunder = Sinyal (Media)',
+        tipText: '5 Komponen komunikasi: Komunikator -> Pesan -> Saluran/Media -> Komunikan -> Umpan Balik (Feedback). Tanpa feedback yang dipahami, komunikasi belum tuntas!'
+      },
+      {
+        id: 3,
+        title: 'Topik 3: Bentuk Interaksi Sosial Asosiatif (Mempersatukan)',
+        summary: 'Proses asosiatif mengarah pada persatuan, kerja sama, dan keharmonisan masyarakat.',
+        points: [
+          'Kerja Sama: Gotong royong, bargaining (tawar-menawar), koalisi (penggabungan kekuatan), dan joint venture (patungan modal).',
+          'Akomodasi: Kompromi, mediasi (pihak ketiga netral menasihati), arbitrase (pihak ketiga berwenang memutuskan), dan toleransi.',
+          'Akulturasi (A + B = AB): Perpaduan 2 budaya tanpa menghilangkan ciri asli (contoh: Menara Kudus).',
+          'Asimilasi (A + B = C): Peleburan 2 budaya menghasilkan kebudayaan baru (contoh: Musik Dangdut).'
+        ],
+        tipTitle: 'Formula Ajaib Budaya: Akulturasi (A+B=AB) vs Asimilasi (A+B=C)',
+        tipText: 'Pada Akulturasi, ciri budaya asli masih tampak (AB). Pada Asimilasi, ciri budaya asli lebur membentuk corak baru (C). Mediasi = cuma nasihat netral, Arbitrase = putusan wasit yang mengikat.'
+      },
+      {
+        id: 4,
+        title: 'Topik 4: Bentuk Interaksi Sosial Disosiatif (Perpecahan & Resolusi)',
+        summary: 'Proses disosiatif mengarah pada persaingan dan pertentangan. Persaingan yang sportif justru bernilai positif.',
+        points: [
+          'Persaingan (Kompetisi): Berlomba meraih prestasi secara jujur dan adil tanpa kekerasan (contoh: cerdas cermat, lomba olahraga).',
+          'Kontravensi: Sikap batin tidak senang, iri hati, desas-desus, atau gosip tersembunyi yang belum menjadi konflik terbuka.',
+          'Konflik / Pertentangan: Benturan fisik atau ancaman terbuka untuk mengalahkan lawan.',
+          'Resolusi Damai: Selesaikan konflik dengan musyawarah, kompromi, dan mediasi guru/wali kelas.'
+        ],
+        tipTitle: 'Patahkan Miskonsepsi Persaingan!',
+        tipText: 'Kompetisi cerdas cermat antarkelas adalah contoh persaingan positif yang memacu semangat belajar. Cegah kontravensi (gosip di belakang) dengan komunikasi terbuka dan tabayyun.'
+      }
+    ];
+
+    function renderMateri(el) {
+      const cur = MATERI_DATA[STATE.materiSubLevel - 1];
+
+      let tabsHtml = MATERI_DATA.map((m, idx) => `
+        <button class="menu-btn ${STATE.materiSubLevel === idx+1 ? 'active' : ''}" onclick="setMateriSub(${idx+1})">
+          Topik ${idx+1}
+        </button>
+      `).join('');
+
+      let pointsHtml = cur.points.map(p => `<li style="margin-bottom: 8px; font-size: 13px; color: #334155;">${p}</li>`).join('');
+
+      el.innerHTML = `
+        <div class="card">
+          <div class="title-header">
+            <span class="kicker">Bahan Ajar Lengkap</span>
+            <h2 class="page-title">4. Materi Pembelajaran</h2>
+            <p class="page-desc">Pelajari konsep inti interaksi sosial dengan strategi belajar teruji dan contoh konkret.</p>
+          </div>
+
+          <div style="display: flex; gap: 8px; margin-bottom: 16px; overflow-x: auto; padding-bottom: 4px;">${tabsHtml}</div>
+
+          <div class="subcard" style="background: #fff; border-color: #2563eb; margin-bottom: 16px;">
+            <div style="font-size: 11px; font-weight: 700; color: #2563eb; text-transform: uppercase;">TOPIK KE-${cur.id}</div>
+            <h3 style="font-size: 18px; font-weight: 800; color: #0f172a; margin: 4px 0 8px;">${cur.title}</h3>
+            <p style="font-size: 13px; color: #475569; margin-bottom: 12px; font-weight: 500;">${cur.summary}</p>
+            <ul style="padding-left: 20px; line-height: 1.6;">${pointsHtml}</ul>
+          </div>
+
+          <!-- Tips Belajar Box -->
+          <div class="tips-box">
+            <div class="tips-header">
+              <span class="tips-badge">💡 TIPS JUARA BELAJAR IPS</span>
+              <span style="font-size: 12px; font-weight: 700; color: #92400e;">Rekomendasi Guru</span>
+            </div>
+            <h4 style="font-size: 14px; font-weight: 700; color: #78350f; margin-bottom: 4px;">${cur.tipTitle}</h4>
+            <p style="font-size: 13px; color: #92400e; line-height: 1.5;">${cur.tipText}</p>
+          </div>
+
+          <div class="nav-footer">
+            <button class="btn-secondary" onclick="setMateriSub(Math.max(1, STATE.materiSubLevel - 1))">← Topik Sebelumnya</button>
+            <button class="btn-primary" onclick="handleNextMateri()">
+              ${STATE.materiSubLevel < 4 ? 'Topik Berikutnya →' : 'Lanjut ke Simulasi Sikap →'}
+            </button>
+          </div>
+        </div>
+      `;
+    }
+    function setMateriSub(lvl) {
+      STATE.materiSubLevel = lvl;
+      playSound('click');
+      saveState();
+      renderApp();
+    }
+    function handleNextMateri() {
+      if (STATE.materiSubLevel < 4) {
+        setMateriSub(STATE.materiSubLevel + 1);
+      } else {
+        navigateTo('simulasi');
+      }
+    }
+
+    /* 6. Simulasi Sikap */
+    const SIMULASI = [
+      {
+        id: 1,
+        title: 'Skenario 1: Menolong Kawan yang Kesulitan Belajar',
+        problem: 'Teman sebangkumu murung karena belum memahami tugas IPS dan batas waktu pengumpulan besok pagi.',
+        opts: [
+          { t: 'Mendampinginya belajar di perpustakaan selama 20 menit untuk menjelaskan dengan sabar.', nature: 'positif', fb: 'Luar biasa! Empati dan tolong-menolong memperkuat persahabatan dan meningkatkan pemahamanmu sendiri.' },
+          { t: 'Membiarkannya karena ingin segera pulang bermain game.', nature: 'pasif', fb: 'Sikap acuh tak acuh mencerminkan individualisme yang mengurangi rasa kebersamaan di kelas.' },
+          { t: 'Mengejeknya karena tugas semudah itu saja ia tidak bisa.', nature: 'negatif', fb: 'Ejekan merusak martabat teman dan dapat memicu pertengkaran serta perundungan.' }
+        ]
+      },
+      {
+        id: 2,
+        title: 'Skenario 2: Musyawarah Tema Majalah Dinding',
+        problem: 'Kelasmu berselisih menentukan tema mading antara Sepak Bola atau Wisata Kuliner Daerah.',
+        opts: [
+          { t: 'Mengusulkan jalan tengah: Olahraga Tradisional dan Kuliner Nusantara.', nature: 'positif', fb: 'Pilihan bijak! Kompromi membuktikan bahwa perbedaan selera dapat disatukan secara kreatif.' },
+          { t: 'Keluar dari kelas karena malas berdebat.', nature: 'pasif', fb: 'Lari dari musyawarah tidak menyelesaikan masalah kelompok.' },
+          { t: 'Menyoraki usulan pihak lain agar idemu menang.', nature: 'negatif', fb: 'Provokasi merusak persatuan dan mengubah musyawarah menjadi konflik.' }
+        ]
+      }
+    ];
+
+    function renderSimulasi(el) {
+      let scenariosHtml = SIMULASI.map((sc) => {
+        const userChoice = STATE.simulasiAnswers[sc.id];
+        let optsHtml = sc.opts.map((opt, oIdx) => {
+          let cls = 'option-btn';
+          if (userChoice === oIdx) {
+            cls += opt.nature === 'positif' ? ' correct' : (opt.nature === 'pasif' ? ' selected' : ' wrong');
+          }
+          return `
+            <button class="${cls}" onclick="answerSimulasi(${sc.id}, ${oIdx})">
+              <span class="opt-circle">${String.fromCharCode(65+oIdx)}</span>
+              <span>${opt.t}</span>
+            </button>
+          `;
+        }).join('');
+
+        let feedback = '';
+        if (userChoice !== undefined) {
+          const chosen = sc.opts[userChoice];
+          feedback = `
+            <div class="feedback-box ${chosen.nature === 'positif' ? 'correct' : 'warning'}">
+              <strong>Konsekuensi Karakter:</strong> ${chosen.fb}
+            </div>
+          `;
+        }
+
+        return `
+          <div class="subcard" style="margin-bottom: 16px;">
+            <h4 style="font-size: 15px; font-weight: 700; color: #0f172a; margin-bottom: 6px;">${sc.title}</h4>
+            <p style="font-size: 13px; color: #475569; margin-bottom: 10px;">${sc.problem}</p>
+            ${optsHtml}
+            ${feedback}
+          </div>
+        `;
+      }).join('');
+
+      el.innerHTML = `
+        <div class="card">
+          <div class="title-header">
+            <span class="kicker">Simulasi Interaktif</span>
+            <h2 class="page-title">5. Simulasi: Bagaimana Kamu Bersikap?</h2>
+            <p class="page-desc">Pilihlah tindakan sosial yang paling bijak dan pelajari konsekuensinya.</p>
+          </div>
+          ${scenariosHtml}
+          <div class="nav-footer">
+            <button class="btn-secondary" onclick="navigateTo('materi')">← Kembali</button>
+            <button class="btn-primary" onclick="navigateTo('game')">Lanjut ke Game Detektif →</button>
+          </div>
+        </div>
+      `;
+    }
+    function answerSimulasi(scId, oIdx) {
+      STATE.simulasiAnswers[scId] = oIdx;
+      const nature = SIMULASI.find(s => s.id === scId).opts[oIdx].nature;
+      playSound(nature === 'positif' ? 'correct' : 'click');
+      saveState();
+      renderApp();
+    }
+
+    /* 7. Game Detektif dengan Maskot */
+    const GAME_CASES = [
+      { t: 'Warga desa gotong royong mendirikan jembatan bambu darurat tanpa upah demi keselamatan pejalan kaki.', cat: 'Kerja Sama' },
+      { t: 'Dua pedagang berselisih batas tenda, lalu kepala pasar menengahi dan menetapkan batas yang disepakati bersama.', cat: 'Akomodasi' },
+      { t: 'Irama Melayu dan alat musik India berpadu harmonis menghasilkan genre Musik Dangdut baru.', cat: 'Asimilasi' },
+      { t: 'Masjid Menara Kudus memiliki menara bercorak candi Hindu tanpa menghilangkan fungsinya sebagai tempat azan Islam.', cat: 'Akulturasi' },
+      { t: 'Siswa-siswi SMP beradu cepat dan tepat dalam final lomba cerdas cermat IPS tingkat kabupaten.', cat: 'Persaingan' },
+      { t: 'Seorang anak merasa iri atas kemenangan temannya lalu menyebar desas-desus bohong di media sosial.', cat: 'Kontravensi' },
+      { t: 'Bentrokan suporter sepak bola di jalanan yang merusak fasilitas umum karena saling ejek.', cat: 'Konflik' },
+      { t: 'Ibu Ani menawar harga buah mangga di pasar tradisional hingga kedua belah pihak sepakat di harga Rp 20.000.', cat: 'Kerja Sama' },
+      { t: 'Kebaya encim memadukan bordir khas Tionghoa dengan pola potongan kebaya adat Betawi.', cat: 'Akulturasi' },
+      { t: 'Dua siswa bersalaman dan saling memaafkan setelah tak sengaja bertabrakan di kantin sekolah.', cat: 'Akomodasi' }
+    ];
+    const GAME_CATS = ['Kerja Sama', 'Akomodasi', 'Asimilasi', 'Akulturasi', 'Persaingan', 'Kontravensi', 'Konflik'];
+
+    function renderGame(el) {
+      const curCase = GAME_CASES[STATE.gameIndex];
+      let hearts = '';
+      for (let i = 0; i < 3; i++) {
+        hearts += i < STATE.gameLives ? '❤️ ' : '🖤 ';
+      }
+
+      let catBtns = GAME_CATS.map(c => `
+        <button class="btn-secondary" style="padding: 10px; font-size: 12px; font-weight: 700;" onclick="answerGame('${c}')">
+          ${c}
+        </button>
+      `).join('');
+
+      el.innerHTML = `
+        <div class="card">
+          <div class="title-header">
+            <span class="kicker">Game Edukatif</span>
+            <h2 class="page-title">6. Game: Detektif Interaksi Sosial</h2>
+            <p class="page-desc">Tentukan klasifikasi bentuk interaksi sosial yang tepat untuk memecahkan kasus!</p>
+          </div>
+
+          <div class="illustration-frame" style="max-height: 180px;">
+            ${SVG_DETECTIVE_BANNER}
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; background: #eff6ff; padding: 12px 16px; border-radius: 12px; margin-bottom: 16px;">
+            <div><strong>Kasus ${STATE.gameIndex + 1} dari ${GAME_CASES.length}</strong></div>
+            <div><strong>Nyawa: ${hearts}</strong> | <strong>Skor: ${STATE.gameScore} Poin</strong></div>
+          </div>
+
+          <div class="subcard" style="margin-bottom: 20px;">
+            <h4 style="font-size: 15px; font-weight: 800; color: #1e3a8a; margin-bottom: 6px;">Berkas Peristiwa Kasus:</h4>
+            <p style="font-size: 14px; color: #1e293b; line-height: 1.6;">"${curCase.t}"</p>
+          </div>
+
+          <h4 style="font-size: 13px; font-weight: 700; color: #0f172a; margin-bottom: 10px;">Pilih Kategori Bentuk Interaksi:</h4>
+          <div class="grid-3" style="gap: 8px;">${catBtns}</div>
+
+          <div class="nav-footer">
+            <button class="btn-secondary" onclick="resetGame()">Ulangi Game 🔄</button>
+            <button class="btn-primary" onclick="navigateTo('latihan')">Lanjut ke Latihan Soal →</button>
+          </div>
+        </div>
+      `;
+    }
+    function answerGame(chosen) {
+      const curCase = GAME_CASES[STATE.gameIndex];
+      if (chosen === curCase.cat) {
+        playSound('correct');
+        STATE.gameScore += 10;
+        showToast('✓ Tepat Sekali! Bentuk interaksi ini adalah: ' + curCase.cat + ' (+10 Poin)', 'success');
+      } else {
+        playSound('wrong');
+        STATE.gameLives -= 1;
+        showToast('❌ Kurang tepat. Yang benar adalah: ' + curCase.cat + ' (-1 Nyawa)', 'error');
+      }
+
+      if (STATE.gameLives <= 0) {
+        showToast('Nyawa habis! Skor akhirmu: ' + STATE.gameScore + '. Silakan coba lagi.', 'error');
+        resetGame();
+        return;
+      }
+
+      if (STATE.gameIndex < GAME_CASES.length - 1) {
+        STATE.gameIndex++;
+      } else {
+        playSound('fanfare');
+        showToast('🎉 Selamat! Kamu berhasil menyelesaikan 10 kasus dengan skor: ' + STATE.gameScore, 'success');
+        STATE.gameIndex = 0;
+      }
+      saveState();
+      renderApp();
+    }
+    function resetGame() {
+      STATE.gameIndex = 0;
+      STATE.gameScore = 0;
+      STATE.gameLives = 3;
+      saveState();
+      renderApp();
+    }
+
+    /* 8. Latihan Soal */
+    const LATIHAN_SOAL = [
+      { id: 1, q: 'Interaksi sosial terjadi apabila memenuhi dua syarat utama, yaitu...', o: ['Kontak sosial dan komunikasi', 'Tempat tinggal dan uang', 'Status sosial dan jabatan', 'Kekuatan fisik'], a: 0 },
+      { id: 2, q: 'Menyapa teman melalui chat WhatsApp termasuk ke dalam jenis kontak...', o: ['Primer langsung', 'Sekunder tidak langsung', 'Tersier', 'Disosiatif'], a: 1 },
+      { id: 3, q: 'Peleburan dua kebudayaan menghasilkan kebudayaan baru tanpa batas asli disebut...', o: ['Akulturasi', 'Asimilasi', 'Akomodasi', 'Kompromi'], a: 1 },
+      { id: 4, q: 'Bentuk akomodasi di mana pihak ketiga bertindak sebagai pemutus sengketa yang mengikat dinamakan...', o: ['Mediasi', 'Arbitrase', 'Toleransi', 'Konsiliasi'], a: 1 },
+      { id: 5, q: 'Sikap batin tersembunyi yang ditandai rasa iri dan penyebaran desas-desus disebut...', o: ['Persaingan', 'Kontravensi', 'Konflik fisik', 'Kooptasi'], a: 1 }
+    ];
+
+    function renderLatihan(el) {
+      let qHtml = LATIHAN_SOAL.map((q, idx) => {
+        const userChoice = STATE.latihanAnswers[q.id];
+        let opts = q.o.map((opt, oIdx) => {
+          let cls = 'option-btn';
+          if (userChoice !== undefined) {
+            if (oIdx === q.a) cls += ' correct';
+            else if (userChoice === oIdx) cls += ' wrong';
+          }
+          return `
+            <button class="${cls}" onclick="answerLatihan(${q.id}, ${oIdx})" ${userChoice !== undefined ? 'disabled' : ''}>
+              <span class="opt-circle">${String.fromCharCode(65+oIdx)}</span>
+              <span>${opt}</span>
+            </button>
+          `;
+        }).join('');
+
+        return `
+          <div class="subcard" style="margin-bottom: 14px;">
+            <p style="font-size: 14px; font-weight: 700; color: #0f172a; margin-bottom: 8px;">${idx+1}. ${q.q}</p>
+            ${opts}
+          </div>
+        `;
+      }).join('');
+
+      el.innerHTML = `
+        <div class="card">
+          <div class="title-header">
+            <span class="kicker">Latihan Mandiri</span>
+            <h2 class="page-title">7. Latihan Soal Interaktif</h2>
+            <p class="page-desc">Uji pemahamanmu sebelum menghadapi evaluasi akhir.</p>
+          </div>
+          ${qHtml}
+          <div class="nav-footer">
+            <button class="btn-secondary" onclick="navigateTo('game')">← Kembali</button>
+            <button class="btn-primary" onclick="navigateTo('evaluasi')">Lanjut ke Evaluasi Akhir →</button>
+          </div>
+        </div>
+      `;
+    }
+    function answerLatihan(qId, oIdx) {
+      STATE.latihanAnswers[qId] = oIdx;
+      const correct = LATIHAN_SOAL.find(q => q.id === qId).a === oIdx;
+      playSound(correct ? 'correct' : 'wrong');
+      saveState();
+      renderApp();
+    }
+
+    /* 9. Evaluasi Akhir */
+    const EVALUASI_SOAL = [
+      { id: 1, q: 'Ciri utama interaksi sosial yang membedakannya dengan tindakan biasa adalah...', o: ['Adanya hubungan timbal balik dua arah', 'Dilakukan oleh satu orang saja', 'Hanya terjadi di gedung sekolah', 'Harus menghasilkan keuntungan uang'], a: 0 },
+      { id: 2, q: 'Contoh kontak sosial primer dalam lingkungan sekolah adalah...', o: ['Menonton video YouTube guru', 'Bersalaman dan menyapa wali kelas di teras', 'Membaca pengumuman di website', 'Menerima pesan WA wali murid'], a: 1 },
+      { id: 3, q: 'Guru Bimbingan Konseling menasihati dua siswa yang berselisih agar berdamai. Peran ini adalah...', o: ['Mediasi', 'Arbitrase', 'Asimilasi', 'Persaingan'], a: 0 },
+      { id: 4, q: 'Menara Masjid Kudus bercorak candi Hindu namun berfungsi tempat adzan Islam. Fenomena ini bukti dari...', o: ['Akulturasi', 'Asimilasi', 'Kontravensi', 'Koalisi'], a: 0 },
+      { id: 5, q: 'Lomba cerdas cermat IPS antarkelas yang sportif merupakan contoh...', o: ['Persaingan positif', 'Konflik destruktif', 'Kontravensi pasif', 'Akomodasi paksa'], a: 0 },
+      { id: 6, q: 'Rantai komunikasi setelah pesan diterima oleh komunikan adalah...', o: ['Umpan balik (Feedback)', 'Komunikator baru', 'Penghapusan pesan', 'Persaingan'], a: 0 },
+      { id: 7, q: 'Iri hati dan menyebarkan desas-desus palsu tentang ketua OSIS tergolong...', o: ['Kontravensi', 'Asimilasi', 'Kerja sama', 'Mediasi'], a: 0 },
+      { id: 8, q: 'Gabungan dua kelompok ekskul PMR dan Pramuka untuk menggelar bakti sosial bersama disebut...', o: ['Koalisi', 'Bargaining', 'Arbitrase', 'Konflik'], a: 0 },
+      { id: 9, q: 'Bahasa tubuh seperti tersenyum ramah dan mengangguk tergolong ke dalam...', o: ['Komunikasi nonverbal', 'Komunikasi verbal lisan', 'Kontak sekunder', 'Disosiatif'], a: 0 },
+      { id: 10, q: 'Rembuk warga di balai RT untuk membahas jadwal ronda malam merupakan interaksi...', o: ['Asosiatif musyawarah (kerja sama)', 'Disosiatif pertentangan', 'Asimilasi budaya', 'Kontravensi rahasia'], a: 0 }
+    ];
+
+    function renderEvaluasi(el) {
+      if (STATE.evaluasiFinished) {
+        let predikat = STATE.evaluasiScore >= 90 ? 'Sangat Baik' : (STATE.evaluasiScore >= 80 ? 'Baik' : (STATE.evaluasiScore >= 70 ? 'Cukup' : 'Perlu Belajar Lagi'));
+        el.innerHTML = `
+          <div class="card" style="text-align: center;">
+            <div class="kicker">Hasil Evaluasi Akhir</div>
+            <h2 class="page-title">Nilai Kamu: ${STATE.evaluasiScore} / 100</h2>
+            <p style="font-size: 16px; font-weight: 700; color: #2563eb; margin: 8px 0 16px;">Predikat: ${predikat}</p>
+            <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 20px;">
+              <button class="btn-secondary" onclick="ulangEvaluasi()">Ulangi Evaluasi 🔄</button>
+              <button class="btn-primary" onclick="navigateTo('refleksi')">Lanjut ke Refleksi Belajar →</button>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      let qHtml = EVALUASI_SOAL.map((q, idx) => {
+        let opts = q.o.map((opt, oIdx) => {
+          let selected = STATE.evaluasiAnswers[q.id] === oIdx;
+          return `
+            <button class="option-btn ${selected ? 'selected' : ''}" onclick="selectEvaluasi(${q.id}, ${oIdx})">
+              <span class="opt-circle">${String.fromCharCode(65+oIdx)}</span>
+              <span>${opt}</span>
+            </button>
+          `;
+        }).join('');
+
+        return `
+          <div class="subcard" style="margin-bottom: 14px;">
+            <p style="font-size: 14px; font-weight: 700; color: #0f172a; margin-bottom: 8px;">${idx+1}. ${q.q}</p>
+            ${opts}
+          </div>
+        `;
+      }).join('');
+
+      el.innerHTML = `
+        <div class="card">
+          <div class="title-header">
+            <span class="kicker">Asesmen Sumatif</span>
+            <h2 class="page-title">8. Evaluasi Akhir</h2>
+            <p class="page-desc">10 soal pilihan ganda berbobot 10 poin. Tekan tombol Selesai setelah menjawab seluruh soal.</p>
+          </div>
+          ${qHtml}
+          <div style="text-align: right; margin-top: 16px;">
+            <button class="btn-primary" style="background: #10b981;" onclick="finishEvaluasi()">Selesai & Koreksi Otomatis ✓</button>
+          </div>
+        </div>
+      `;
+    }
+    function selectEvaluasi(qId, oIdx) {
+      STATE.evaluasiAnswers[qId] = oIdx;
+      playSound('click');
+      saveState();
+      renderApp();
+    }
+    function finishEvaluasi() {
+      if (Object.keys(STATE.evaluasiAnswers).length < EVALUASI_SOAL.length) {
+        showToast('⚠️ Harap jawab semua 10 butir soal terlebih dahulu!', 'error');
+        return;
+      }
+      let score = 0;
+      EVALUASI_SOAL.forEach(q => {
+        if (STATE.evaluasiAnswers[q.id] === q.a) score += 10;
+      });
+      STATE.evaluasiScore = score;
+      STATE.evaluasiFinished = true;
+      playSound(score >= 80 ? 'fanfare' : 'correct');
+      saveState();
+      renderApp();
+      showToast('🎉 Evaluasi selesai! Nilaimu: ' + score + '/100', 'success');
+    }
+    function ulangEvaluasi() {
+      STATE.evaluasiFinished = false;
+      STATE.evaluasiAnswers = {};
+      STATE.evaluasiScore = 0;
+      saveState();
+      renderApp();
+    }
+
+    /* 10. Refleksi */
+    function renderRefleksi(el) {
+      el.innerHTML = `
+        <div class="card">
+          <div class="title-header">
+            <span class="kicker">Refleksi Karakter</span>
+            <h2 class="page-title">9. Refleksi Pembelajaran</h2>
+            <p class="page-desc">Tuliskan pemaknaan dirimu terhadap pembelajaran materi interaksi sosial.</p>
+          </div>
+
+          <div class="subcard" style="margin-bottom: 14px;">
+            <label style="font-size: 13px; font-weight: 700; color: #0f172a; display: block; margin-bottom: 6px;">1. Apa hal baru yang kamu pelajari hari ini?</label>
+            <textarea id="ref-1" rows="2" style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px;">${STATE.refleksi.halBaru}</textarea>
+          </div>
+
+          <div class="subcard" style="margin-bottom: 14px;">
+            <label style="font-size: 13px; font-weight: 700; color: #0f172a; display: block; margin-bottom: 6px;">2. Bentuk interaksi apa yang paling sering kamu temui di sekolah/rumah?</label>
+            <textarea id="ref-2" rows="2" style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px;">${STATE.refleksi.bentukSering}</textarea>
+          </div>
+
+          <div class="subcard" style="margin-bottom: 14px;">
+            <label style="font-size: 13px; font-weight: 700; color: #0f172a; display: block; margin-bottom: 6px;">3. Bagaimana caramu menyelesaikan perbedaan pendapat secara damai?</label>
+            <textarea id="ref-3" rows="2" style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px;">${STATE.refleksi.resolusiKonflik}</textarea>
+          </div>
+
+          <div class="subcard" style="margin-bottom: 14px;">
+            <label style="font-size: 13px; font-weight: 700; color: #0f172a; display: block; margin-bottom: 6px;">4. Komitmen nyata apa yang akan kamu lakukan untuk interaksi positif?</label>
+            <textarea id="ref-4" rows="2" style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13px;">${STATE.refleksi.komitmenPositif}</textarea>
+          </div>
+
+          <div class="nav-footer">
+            <button class="btn-secondary" onclick="navigateTo('evaluasi')">← Kembali</button>
+            <button class="btn-primary" onclick="saveRefleksi()">Simpan & Lihat Hasil Belajar →</button>
+          </div>
+        </div>
+      `;
+    }
+    function saveRefleksi() {
+      STATE.refleksi.halBaru = document.getElementById('ref-1').value.trim();
+      STATE.refleksi.bentukSering = document.getElementById('ref-2').value.trim();
+      STATE.refleksi.resolusiKonflik = document.getElementById('ref-3').value.trim();
+      STATE.refleksi.komitmenPositif = document.getElementById('ref-4').value.trim();
+      playSound('correct');
+      saveState();
+      navigateTo('hasil');
+    }
+
+    /* 11. Hasil Belajar & Rapor Cetak */
+    function renderHasil(el) {
+      const predikat = STATE.evaluasiScore >= 90 ? 'Sangat Baik' : (STATE.evaluasiScore >= 80 ? 'Baik' : (STATE.evaluasiScore >= 70 ? 'Cukup' : 'Perlu Belajar Lagi'));
+      const tgl = new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+      el.innerHTML = `
+        <div class="no-print" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <button class="btn-secondary" onclick="navigateTo('refleksi')">← Kembali ke Refleksi</button>
+          <button class="btn-primary" style="background: #059669;" onclick="window.print()">🖨️ Cetak / Simpan PDF</button>
+        </div>
+
+        <div class="card" style="border: 2px solid #cbd5e1; padding: 32px 24px;">
+          <div style="text-align: center; border-bottom: 2px solid #0f172a; padding-bottom: 16px; margin-bottom: 20px;">
+            <p style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: #64748b; letter-spacing: 1px;">KEMENTERIAN PENDIDIKAN, KEBUDAYAAN, RISET, DAN TEKNOLOGI</p>
+            <h2 style="font-size: 20px; font-weight: 800; color: #0f172a; margin-top: 4px;">RAPOR HASIL BELAJAR INTERAKTIF IPS</h2>
+            <p style="font-size: 13px; font-weight: 700; color: #2563eb;">Materi: Interaksi Sosial · Kelas VII SMP/MTs (Kurikulum Merdeka)</p>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 20px; background: #f8fafc; padding: 12px; border-radius: 8px;">
+            <div>Nama Siswa: <strong>${STATE.studentName || 'Peserta Didik'}</strong></div>
+            <div>Tanggal: <strong>${tgl}</strong></div>
+            <div>Ketuntasan: <strong style="color: ${STATE.evaluasiScore >= 70 ? '#047857' : '#b91c1c'};">${STATE.evaluasiScore >= 70 ? 'TUNTAS' : 'BELUM TUNTAS'}</strong></div>
+          </div>
+
+          <div class="grid-3" style="text-align: center; margin-bottom: 24px;">
+            <div class="subcard" style="background: #eff6ff;">
+              <span style="font-size: 11px; font-weight: 700; color: #2563eb;">NILAI EVALUASI</span>
+              <div style="font-size: 32px; font-weight: 800; color: #1e3a8a;">${STATE.evaluasiScore} / 100</div>
+              <span style="font-size: 12px; font-weight: 700; color: #1e3a8a;">Predikat: ${predikat}</span>
+            </div>
+            <div class="subcard" style="background: #ecfdf5;">
+              <span style="font-size: 11px; font-weight: 700; color: #059669;">SKOR GAME DETEKTIF</span>
+              <div style="font-size: 32px; font-weight: 800; color: #064e3b;">${STATE.gameScore} Poin</div>
+              <span style="font-size: 12px; color: #064e3b;">10 Kasus Selesai</span>
+            </div>
+            <div class="subcard" style="background: #fffbeb;">
+              <span style="font-size: 11px; font-weight: 700; color: #d97706;">STATUS PROGRES</span>
+              <div style="font-size: 32px; font-weight: 800; color: #78350f;">100%</div>
+              <span style="font-size: 12px; color: #78350f;">10 Menu Selesai</span>
+            </div>
+          </div>
+
+          <h4 style="font-size: 13px; font-weight: 700; color: #0f172a; margin-bottom: 8px;">Catatan Refleksi Diri Siswa:</h4>
+          <div style="background: #f8fafc; padding: 12px; border-radius: 8px; font-size: 12px; line-height: 1.6; margin-bottom: 30px;">
+            <p><strong>Hal Baru:</strong> ${STATE.refleksi.halBaru || '-'}</p>
+            <p><strong>Resolusi Damai:</strong> ${STATE.refleksi.resolusiKonflik || '-'}</p>
+            <p><strong>Komitmen Sikap:</strong> ${STATE.refleksi.komitmenPositif || '-'}</p>
+          </div>
+
+          <div style="display: flex; justify-content: space-around; text-align: center; font-size: 12px; margin-top: 40px;">
+            <div>
+              <p>Mengetahui,</p>
+              <p style="font-weight: 700;">Guru Mata Pelajaran IPS</p>
+              <div style="height: 50px;"></div>
+              <p>( ........................................ )</p>
+            </div>
+            <div>
+              <p>Peserta Didik,</p>
+              <p style="font-weight: 700;">Kelas VII SMP/MTs</p>
+              <div style="height: 50px;"></div>
+              <p>( ${STATE.studentName || '........................................'} )</p>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Initial Launch
+    renderApp();
+  </script>
+</body>
+</html>
